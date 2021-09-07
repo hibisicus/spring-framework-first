@@ -57,6 +57,8 @@ public class EncodedResource implements InputStreamSource {
 	 * Create a new {@code EncodedResource} for the given {@code Resource},
 	 * not specifying an explicit encoding or {@code Charset}.
 	 * @param resource the {@code Resource} to hold (never {@code null})
+	 * 对于给定的resource指定一个新的EncodedResource对象,该对象没有确定（显式）编码
+	 * resource从不未空;构造参数:Assert.notNull(resource, "Resource must not be null");
 	 */
 	public EncodedResource(Resource resource) {
 		this(resource, null, null);

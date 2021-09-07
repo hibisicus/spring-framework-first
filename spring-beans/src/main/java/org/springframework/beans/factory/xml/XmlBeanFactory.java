@@ -64,6 +64,7 @@ public class XmlBeanFactory extends DefaultListableBeanFactory {
 	 * @throws BeansException in case of loading or parsing errors
 	 */
 	public XmlBeanFactory(Resource resource) throws BeansException {
+//		调用 XmlBeanFactory (Resource, Bean Factory ）构选方法
 		this(resource, null);
 	}
 
@@ -75,6 +76,9 @@ public class XmlBeanFactory extends DefaultListableBeanFactory {
 	 * @throws BeansException in case of loading or parsing errors
 	 */
 	public XmlBeanFactory(Resource resource, BeanFactory parentBeanFactory) throws BeansException {
+//		构造两数内部再次调用 内部构造函数：
+//		I parentBeanFactory 为父炎 BeanFactory 用于factory 合并，可以为空
+
 		super(parentBeanFactory);
 		this.reader.loadBeanDefinitions(resource);
 	}
