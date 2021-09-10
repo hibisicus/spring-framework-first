@@ -311,20 +311,24 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
     /**
      * Process the given bean element, parsing the bean definition
      * and registering it with the registry.
+     * 对bean标签的解析(最复杂、最重要)
      */
     protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
+//        委托BeanDefinitionParserDelegate中的parseBeanDefinitionElement进行元素解析;返回BeanDefinitionHolder类型的bdHolder
+//        (包含配置文件中的各种属性,claa、name、id、alias)
         BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
         if (bdHolder != null) {
+//            如果默认标签的子节点有自定义属性，则对自定义标签进行解析
             bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
             try {
-                // Register the final decorated instance.
+                // Register the final decorated instance.;对解析后的bdHolder进行注册，同时注册操作委托给了registerBeanDefinition方法
                 BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder, getReaderContext().getRegistry());
             }
             catch (BeanDefinitionStoreException ex) {
                 getReaderContext().error("Failed to register bean definition with name '" +
                         bdHolder.getBeanName() + "'", ele, ex);
             }
-            // Send registration event.
+            // Send registration event.;发出事件响应，通知监视器,这个Bean已经加载完成.
             getReaderContext().fireComponentRegistered(new BeanComponentDefinition(bdHolder));
         }
     }
