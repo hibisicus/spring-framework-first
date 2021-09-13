@@ -6,6 +6,7 @@ package com.anle.entity;
  * @date 2021-09-02 10:44
  */
 public class User {
+
 	private String id;
 	private String userName;
 
@@ -35,5 +36,9 @@ public class User {
 
 	@Override public String toString() {
 		return "User{" + "id='" + id + '\'' + ", userName='" + userName + '\'' + '}';
+	}
+
+	public void showMe(){
+        System.out.println("show me test--User");
 	}
 }

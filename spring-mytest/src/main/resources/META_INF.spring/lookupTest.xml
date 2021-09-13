@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean id="getBeanTest" name="" class="com.anle.entity.GetBeanTest">
+        <!--动态返回teacher锁代表的bean作为getBean的返回值-->
+        <lookup-method name="getBean" bean="student"/>
+    </bean>
+    <bean id="teacher" class="com.anle.entity.Teacher"/>
+    <bean id="student" class="com.anle.entity.User"/>
+    <!--=========================================-->
+    <bean class="com.anle.entity.TestChanegMethod" id="testChangeMethod">
+        <replaced-method name="changeMe" replacer="replacer"/>
+    </bean>
+    <bean class="com.anle.entity.TestMethodReplacer" id="replacer"></bean>
+</beans>
