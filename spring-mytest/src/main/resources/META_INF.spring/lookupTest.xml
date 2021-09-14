@@ -16,4 +16,10 @@
         <replaced-method name="changeMe" replacer="replacer"/>
     </bean>
     <bean class="com.anle.entity.TestMethodReplacer" id="replacer"></bean>
+    <!--============================================================-->
+    <bean class="com.anle.entity.HelloBean" id="HelloBean">
+        <constructor-arg index="0" value="测试"/>
+        <constructor-arg index="1" value="你好"/>
+    </bean>
+
 </beans>
