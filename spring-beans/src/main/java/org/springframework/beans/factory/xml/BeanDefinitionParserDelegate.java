@@ -901,15 +901,20 @@ public class BeanDefinitionParserDelegate {
 
     /**
      * Parse a property element.
+     * parsePropertyValue
+     * addPropertyValue
+     * 与构造方法注入方式不同的是将返回值使用PropertyValue进行封装，并记录在了BeanDefinition 中的property Values属性中
      */
     public void parsePropertyElement(Element ele, BeanDefinition bd) {
         String propertyName = ele.getAttribute(NAME_ATTRIBUTE);
+//        获取哦欸之元素中name的值
         if (!StringUtils.hasLength(propertyName)) {
             error("Tag 'property' must have a 'name' attribute", ele);
             return;
         }
         this.parseState.push(new PropertyEntry(propertyName));
         try {
+//            不允许多个对同一属性进行配置
             if (bd.getPropertyValues().contains(propertyName)) {
                 error("Multiple 'property' definitions for property '" + propertyName + "'", ele);
                 return;
@@ -927,6 +932,10 @@ public class BeanDefinitionParserDelegate {
 
     /**
      * Parse a qualifier element.
+     * 对于qualifer元素的获取,存在更多的是注解的形式
+     * 在使用Spring框架进行自动注入时,Spring容器中匹配的候选Bean数必须有且仅有一个；
+     * 当找不到一个匹配的Bean时，Spring容器将抛出BeanCreationException异常，并住处必须至少拥有一个匹配的Bean
+     * Spring允许我么 通过qualifer指定注入Bean的名称；
      */
     public void parseQualifierElement(Element ele, AbstractBeanDefinition bd) {
         String typeName = ele.getAttribute(TYPE_ATTRIBUTE);
