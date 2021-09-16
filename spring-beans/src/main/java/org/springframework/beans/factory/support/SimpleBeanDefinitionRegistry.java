@@ -40,6 +40,9 @@ public class SimpleBeanDefinitionRegistry extends SimpleAliasRegistry implements
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(64);
 
 
+	/*
+	* 将beanName作为key,然后放入beanDefinition
+	* */
 	@Override
 	public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
 			throws BeanDefinitionStoreException {

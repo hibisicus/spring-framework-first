@@ -972,6 +972,13 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	// Implementation of BeanDefinitionRegistry interface
 	//---------------------------------------------------------------------
 
+	/*
+	* 1、对AbstractBeanDefinition的校验。在解析 XML 文件的时候我们提过校验，但是此校验非彼校验，
+	* 之前的校验时针对于 XML 格式的校验，而此时的校验时针是对于 AbstractBeanDefinition的methodOverrides属性的 。
+	* 2. 对 beanName 已经注册的情况的处理 。 如果设置了不允许 bean 的覆盖，则需要抛出异常，否则直接覆盖。
+	* 3. 加入 map 缓存。
+	* 4. 清除解析之前留下的对应 beanName的缓存
+	* */
 	@Override
 	public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
 			throws BeanDefinitionStoreException {
@@ -981,6 +988,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 		if (beanDefinition instanceof AbstractBeanDefinition) {
 			try {
+				/*
+				* 注册前的最后一次校验，这里的校验不同意之前的XML文件校验，
+				* 主要是对于AbstractBeanDefinition属性的methodOverrides校验
+				* 校验methodOverrides是否与工厂方法并存或者methodOverrides对应的方法根本不存在
+				* */
 				((AbstractBeanDefinition) beanDefinition).validate();
 			}
 			catch (BeanDefinitionValidationException ex) {
@@ -1021,17 +1033,20 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		else {
 			if (hasBeanCreationStarted()) {
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
+//				因为beanDefinitionMap是全局变量，这里定会存在并发访问的情况
 				synchronized (this.beanDefinitionMap) {
+//					todo: beanName已经注册了怎么办？？ 对应的BeanName已经注册且在配置中配置了bean不允许被覆盖,会怎么办？？
 					this.beanDefinitionMap.put(beanName, beanDefinition);
 					List<String> updatedDefinitions = new ArrayList<>(this.beanDefinitionNames.size() + 1);
 					updatedDefinitions.addAll(this.beanDefinitionNames);
+//					记录beanName
 					updatedDefinitions.add(beanName);
 					this.beanDefinitionNames = updatedDefinitions;
 					removeManualSingletonName(beanName);
 				}
 			}
 			else {
-				// Still in startup registration phase
+				// Still in startup registration phase;注册beanDefinition
 				this.beanDefinitionMap.put(beanName, beanDefinition);
 				this.beanDefinitionNames.add(beanName);
 				removeManualSingletonName(beanName);
@@ -1039,6 +1054,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			this.frozenBeanDefinitionNames = null;
 		}
 
+//		重置所有beanName对应的缓存
 		if (existingDefinition != null || containsSingleton(beanName)) {
 			resetBeanDefinition(beanName);
 		}
