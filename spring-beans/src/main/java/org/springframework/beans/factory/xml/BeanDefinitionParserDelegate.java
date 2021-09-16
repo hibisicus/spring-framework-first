@@ -1514,6 +1514,11 @@ public class BeanDefinitionParserDelegate {
      * @param originalDef the current bean definition
      * @param containingBd the containing bean definition (if any)
      * @return the decorated bean definition
+     *
+     * 第三个参数是父类bean,当对某个嵌套配置进行分析的时候，需要传递父类beanDefinition;
+     * 目的是为了使用父类scope属性，以备自雷没有设置scope时，默认使用父类的属性
+     * 作用：只对自定义标签或者Bean的自定义进行处理，。在方法中实现了寻找自定义标签并根据自定义标签寻找命名空间处理器
+     * 并进行了进一步解析。
      */
     public BeanDefinitionHolder decorateBeanDefinitionIfRequired(
             Element ele, BeanDefinitionHolder originalDef, @Nullable BeanDefinition containingBd) {
@@ -1522,6 +1527,7 @@ public class BeanDefinitionParserDelegate {
 
         // Decorate based on custom attributes first.
         NamedNodeMap attributes = ele.getAttributes();
+//        遍历所有的属性，看看是否有适用于修饰的属性
         for (int i = 0; i < attributes.getLength(); i++) {
             Node node = attributes.item(i);
             finalDefinition = decorateIfRequired(node, finalDefinition, containingBd);
@@ -1529,6 +1535,7 @@ public class BeanDefinitionParserDelegate {
 
         // Decorate based on custom nested elements.
         NodeList children = ele.getChildNodes();
+//        遍历所有的子节点，看看是否有适用于修饰的子元素
         for (int i = 0; i < children.getLength(); i++) {
             Node node = children.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -1545,14 +1552,21 @@ public class BeanDefinitionParserDelegate {
      * @param originalDef the current bean definition
      * @param containingBd the containing bean definition (if any)
      * @return the decorated bean definition
+     *
+     * 先获取属性或者元素的命名空间，以此来判断该元素或者属性是否适用于自定义标签的解析条件，找出自定义类型所对应的NamespaceHandler进行进一步的解析
+     *
      */
     public BeanDefinitionHolder decorateIfRequired(
             Node node, BeanDefinitionHolder originalDef, @Nullable BeanDefinition containingBd) {
 
+//        获取自定义标签的命名空间
         String namespaceUri = getNamespaceURI(node);
+//        对于非默认标签进行修饰（进行非空判断）
         if (namespaceUri != null && !isDefaultNamespace(namespaceUri)) {
+//            根据命名空间找到对应的处理器
             NamespaceHandler handler = this.readerContext.getNamespaceHandlerResolver().resolve(namespaceUri);
             if (handler != null) {
+//                进行修饰
                 BeanDefinitionHolder decorated =
                         handler.decorate(node, originalDef, new ParserContext(this.readerContext, this, containingBd));
                 if (decorated != null) {
