@@ -22,6 +22,10 @@ package org.springframework.beans.factory.parsing;
  *
  * @author Juergen Hoeller
  * @since 2.0
+ *
+ * 此实现只是为了扩展,当程序开发人员需要对注册BeanDefinition事件进行监听时,可以通过注册
+ * 监听器饿方式并将处理逻辑写入监听器中。
+ * 目前Spring没有做任何逻辑处理
  */
 public class EmptyReaderEventListener implements ReaderEventListener {
 

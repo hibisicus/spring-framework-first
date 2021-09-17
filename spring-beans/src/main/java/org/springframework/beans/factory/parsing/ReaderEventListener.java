@@ -40,6 +40,10 @@ public interface ReaderEventListener extends EventListener {
 	 * Notification that the given component has been registered.
 	 * @param componentDefinition a descriptor for the new component
 	 * @see BeanComponentDefinition
+	 *
+	 * 注解见 org.springframework.beans.factory.parsing.EmptyReaderEventListener#componentRegistered(org.springframework
+	 * .beans.factory.parsing.ComponentDefinition)
+	 * Spring逻辑没有做任何处理
 	 */
 	void componentRegistered(ComponentDefinition componentDefinition);
 
