@@ -1,10 +1,7 @@
 package com.anle.test;
 
-import com.anle.config.JavaConfig;
-import com.anle.entity.GetBeanTest;
 import com.anle.entity.TestChanegMethod;
 import com.anle.entity.User;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -29,9 +26,16 @@ public class Test {
         /*===========================End================================*/
 
         /*-------------2021-0913 2023---------------------------------*/
-        ClassPathXmlApplicationContext bf = new ClassPathXmlApplicationContext("META_INF.spring/lookupTest.xml");
-        TestChanegMethod test = (TestChanegMethod) bf.getBean("testChangeMethod");
-        test.changeMe();
+//        ClassPathXmlApplicationContext bf = new ClassPathXmlApplicationContext("META_INF/spring/lookupTest.xml");
+//        TestChanegMethod test = (TestChanegMethod) bf.getBean("testChangeMethod");
+//        test.changeMe();
+        /*===========================End================================*/
+
+        /*-------------2021-0918 1817---------------------------------*/
+        // todo Spring创建自定义标签文件失败;错误描述是找不到myName配置文件;待修复;Spring源码深度解析Page87;
+        ClassPathXmlApplicationContext bf = new ClassPathXmlApplicationContext("META_INF/spring/beanTest.xml");
+        User test = (User) bf.getBean("testBean");
+        System.out.println(test.getEmail()+"---"+test.getUserName());
         /*===========================End================================*/
     }
 

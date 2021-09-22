@@ -7,23 +7,18 @@ package com.anle.entity;
  */
 public class User {
 
-	private String id;
+	private String email;
 	private String userName;
 
 	public User() {
 	}
 
-	public User(String id, String userName) {
-		this.id = id;
-		this.userName = userName;
+	public String getEmail() {
+		return email;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getUserName() {
@@ -34,11 +29,12 @@ public class User {
 		this.userName = userName;
 	}
 
-	@Override public String toString() {
-		return "User{" + "id='" + id + '\'' + ", userName='" + userName + '\'' + '}';
-	}
-
 	public void showMe(){
         System.out.println("show me test--User");
+	}
+
+	public User(String email, String userName) {
+		this.email = email;
+		this.userName = userName;
 	}
 }
