@@ -1,6 +1,7 @@
 package com.anle.entity;
 
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.stereotype.Repository;
 
 /**
  * car factoryBean
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.FactoryBean;
  * @version 1.0
  * @date 2021-09-23 00:01
  */
+@Repository("carFactoryBean")
 public class CarFactoryBean implements FactoryBean<Car> {
     private String carInfo;
 

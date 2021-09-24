@@ -165,6 +165,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	@Override
 	@Nullable
 	public Object getSingleton(String beanName) {
+//		参数true设置标识允许早期依赖
 		return getSingleton(beanName, true);
 	}
 
@@ -175,23 +176,37 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param beanName the name of the bean to look for
 	 * @param allowEarlyReference whether early references should be created or not
 	 * @return the registered singleton object, or {@code null} if none found
+	 *
+	 * singletonObjects 单例对象列表， beanName -> bean实例
+	 * singletonFactories 单例工厂列表 beanName -> beanFactory
+	 * earlySingletonObjects 循环对象依赖列表，对象在创建之后，进行注入过程中，发现产生了循环依赖，那么会将对象放入到这个队列，并且从singletonFactories中移除掉。
+	 * singletonsCurrentlyInCreation 正在创建的单例名称队列
+	 * registeredSingletons 已经创建成功的单例名称列表
 	 */
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		// Quick check for existing instance without full singleton lock
+		// (从单例缓存中查找)检查缓存中是否存在实例（创建的bean）
 		Object singletonObject = this.singletonObjects.get(beanName);
+//		isSingletonCurrentlyInCreation判断对应的单例对象是否正在创建中
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
+//			如果为空,则锁定全局变量并进行处理;并确保当前beanName是否正在创建中;通过早期单例对象缓存;
+//			earlySingletonObjects会提前曝光所有的单例,并尝试进行查找
 			singletonObject = this.earlySingletonObjects.get(beanName);
 			if (singletonObject == null && allowEarlyReference) {
 				synchronized (this.singletonObjects) {
 					// Consistent creation of early reference within full singleton lock
+//					如果此bean正在加载则不处理（从单例对象缓存中获取----bean名称到bean实例）
 					singletonObject = this.singletonObjects.get(beanName);
 					if (singletonObject == null) {
 						singletonObject = this.earlySingletonObjects.get(beanName);
 						if (singletonObject == null) {
+//							当某些方法需要提前初始化的时候回调用adSingletonFactory方法将
+//							对应的ObjectFactory初始化策略存储在singletonFactories
 							ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 							if (singletonFactory != null) {
 								singletonObject = singletonFactory.getObject();
+//								记录在缓存中，earlySingletonObjects和singletonFactories互斥;
 								this.earlySingletonObjects.put(beanName, singletonObject);
 								this.singletonFactories.remove(beanName);
 							}

@@ -1923,6 +1923,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	 * registered BeanPostProcessors, giving them a chance to post-process the
 	 * object obtained from FactoryBeans (for example, to auto-proxy them).
 	 * @see #applyBeanPostProcessorsAfterInitialization
+	 *
+	 * Spring获取bean的规则中存在这么一条:尽可能保证所有bean初始化后都会调用注册的BeanPostProcessor
+	 * 的postProcessAfterInitialization方法进行处理。
 	 */
 	@Override
 	protected Object postProcessObjectFromFactoryBean(Object object, String beanName) {
