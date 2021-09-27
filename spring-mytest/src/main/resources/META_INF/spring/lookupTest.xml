@@ -23,6 +23,24 @@
     </bean>
     <!--================================================================-->
 
-    <bean id="car" class="com.anle.entity.Car" carInfo="品牌,2002,40000"/>
+<!--    <bean id="car" class="com.anle.entity.Car" carInfo="品牌,2002,40000"/>-->
+    <!--
+    一、构造器循环依赖=========================================================
+    Spring 容器创建testA bean,当前创建bean池 查找是否当前bean正在创建，如果没发现，则继续准备其需要的构造器参数testB 并将testA 标识符放到当前创建bean池
+    Spring容器创建testB bean 首先去 当前创建bean池 查找是否当前bean正在创建，如果没发现，则继续准备其需要的构造器参数testC 并将testB标识符放到当前创建bean池
+    Spring容器创建testC bean 首先去当前创建bean池 查找是否当前bean正在创建，如果没有发现，则继续准备其需要的构造器参数testA 并肩testC标识符放到当前bean池中
+    到此位置Spring容器要去创建testA bean发现该bean标识符在当前创建bean池中，因为表示循环依赖，所以抛出BeanCurrentlyInCreationException;
+    二、setter循环依赖======================================================
+    1、Spring容器创建单例 testA bean，首先根据无参构造器创建beans,并暴漏一个ObjectFactory,用于返回一个提前暴露的一个创建中的bean，并将testA
+    标识符当道当前创建bean池中，然后进行setter注入testB
+    2、Spring容器创建单例testB bean,首先根据午餐构造器创建bean，并暴漏一个ObjectFactory 用于返回一个提前暴露一个创建中的bean，并将testB标识符放到当前创建bean池
+    然后进行setter注入cricle
+    3、Spring容器创建单例testC bean, 首先根据午餐构造器创建bean，并暴露一个ObjectFactory 用于返回一个提前暴漏一个创建中的bean,并将testC标识符放到当前创建bean池
+    然后进行setter注入testA 进行注入testA时候由于提前暴漏了ObjectFactory 工厂，从而使他返回提前暴漏一个创建中的bean
+    4、最后在依赖注入testB和testA 完成setter注入
+    三、prototype范围的依赖处理
+    对于prototype作用域beans,Spring容器无法完成依赖注入，因为Spring容器不进行缓存prototype作用域的bean,因此无法提前暴漏一个创建中的bean
+    对于singleton作用域bean,可以通过setAllowCircularReferences(false);来禁用循环引用
 
+    -->
 </beans>

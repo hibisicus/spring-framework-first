@@ -225,12 +225,24 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 * @param singletonFactory the ObjectFactory to lazily create the singleton
 	 * with, if necessary
 	 * @return the registered singleton object
+     *
+     * 1、检查缓存是否已经加载过
+     * 2、若没有加载，则记录beanName的正在加载状态
+     * 3、加载单例前记录加载状态;beforeSingletonCreation最重要的操作是记录加载状态;
+     * 即通过this.singletonsCurrentlyInCreation.add(beanName)将当前正要创建的bean记录在缓存中;方便对依赖缓存进行检测
+     * 4、通过调用参数传入ObjectFactory的个体Object方法实例化bean
+     * 5、加载单例后的处理方法调用;bean加载结束后，移除缓存中对该bean的正太加载状态的记录
+     * 6、将结果记录至缓存并删除加载bean过程中所记录的各种辅助状态
+     * 7、返回处理结果
 	 */
 	public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
 		Assert.notNull(beanName, "Bean name must not be null");
+//		全局变量需要同步
 		synchronized (this.singletonObjects) {
+//			首先检查对应的bean是否已经加载过；singleton模式就是复用已经创建的bean
 			Object singletonObject = this.singletonObjects.get(beanName);
 			if (singletonObject == null) {
+//				为空才可以进行singleton的bean的初始化
 				if (this.singletonsCurrentlyInDestruction) {
 					throw new BeanCreationNotAllowedException(beanName,
 							"Singleton bean creation not allowed while singletons of this factory are in destruction " +
@@ -246,6 +258,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					this.suppressedExceptions = new LinkedHashSet<>();
 				}
 				try {
+//					初始化bean
 					singletonObject = singletonFactory.getObject();
 					newSingleton = true;
 				}
@@ -272,6 +285,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {
+//					加入缓存
 					addSingleton(beanName, singletonObject);
 				}
 			}
