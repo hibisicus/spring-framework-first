@@ -57,9 +57,16 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	}
 
 
+	/*
+	* 程序首先判断如果beanDefinition.getMethodOverrides（）为空也就是用户没有使用replace或者lookup的配置方法,则直接使用反射
+	* 如果使用了这两个特性，就必须使用动态代理的方式将两个特性所对应的逻辑的增强拦截器设置进去，这样即可保证在调用方法的时候会被相应的
+	* 拦截器增强，返回值为包含拦截器的代理实例
+	* */
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner) {
 		// Don't override the class with CGLIB if no overrides.
+//		如果又需要覆盖或者动态替换的方法则使用cglib进行动态代理，因为可以在创建代理的同事将动态方法植入类中;但是如果没有
+//		需要动态改变的方法，则可以直接使用反射
 		if (!bd.hasMethodOverrides()) {
 			Constructor<?> constructorToUse;
 			synchronized (bd.constructorArgumentLock) {
