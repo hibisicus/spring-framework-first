@@ -576,6 +576,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * 6、循环依赖检查;Spring解决循环依赖只对单例有效,而对于prototype的bean,Spring操作是抛出异常;
      * 7、注册DisposableBean;如果配置了destory-method，这里效果要注册以便于在销毁时候调用;
      * 8、完成创建并返回。
+	 *
+	 * Spring处理循环依赖的解决办法，在B中创建依赖A时，通过ObjectFactory提供的实例化方法来中断A中的属性填充，使B中持有的A仅仅是刚刚初始化并没有任何填充属性的A,
+	 * 而这正初始化A的步骤还是再最开始创建A的时候进行的，但是因为A与B中的A所表示的属性地址是一样的，所以在A中创建好的属性填充自然可以通过B中的A获取
+	 * 这就解决了循环依赖问题
 	 */
 	protected Object doCreateBean(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)
 			throws BeanCreationException {
@@ -634,7 +638,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				logger.trace("Eagerly caching bean '" + beanName +
 						"' to allow for resolving potential circular references");
 			}
-//			为避免后期循环依赖,可以在bean初始化完成前将创建实例的ObjectFactory加入工厂
+//			为避免后期循环依赖,可以在bean初始化完成前将创建实例的ObjectFactory加入工厂;
+//			对Bean再一次以来引用,主要应用SmartInstantiationAware beanPost Processor,
+//			其中AOP就是在这里将advice动态织入bean中，若没有则直接返回bean,不做任何处理
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
