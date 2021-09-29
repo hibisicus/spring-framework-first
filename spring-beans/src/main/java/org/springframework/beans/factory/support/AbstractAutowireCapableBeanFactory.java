@@ -613,6 +613,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
 //        是否需要提早曝光：单例;允许循环依赖;当前bean正在创建中，检测循环依赖
+		/*
+		* mbd.isSingleton():是否允许循环依赖；可以通过硬编码的方式或者可以通过自定义命名空间进行配置
+		* ClassPathXmlApplicationContext bf = new ClassPathXmlApplicationContext("XXX.xml");
+		* bf.setAllowBeanDefinitionOverriding(false)
+		*
+		* isSingletonCurrentlyInCreation(beanName):该Bean是否在创建中。在Spring中，会有一个专门的属性默认为DefaultSingletonBeanRegistry的
+		* singletonsCurrentlyInCreation来记录Bean的加载状态,在bean开始创建前会将beanName记录在属性中，在bean创建结束后会将beanName从属性中移除。
+		* 装填的记录位置在不同的scope中记录的位置不一样;
+		* eg:singleton----org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(java
+		* .lang.String)函数的org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.beforeSingletonCreation
+		* 和org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.afterSingletonCreation中,在这两端函数中分别
+		* this.singletonsCurrentlyInCreation.add(beanName)和this.singletonsCurrentlyInCreation.remove(beanName)进行状态的记录和移除
+		 * */
+		/* earlySingletonExposure满足是否是单例、是否允许循环依赖、是否对应的bean正在创建的条件的综合 */
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
