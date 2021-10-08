@@ -541,6 +541,24 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		return this.applicationListeners;
 	}
 
+	/**
+	 *
+	 * @throws BeansException
+	 * @throws IllegalStateException
+	 * 1、初始化前的准备工作,例如对系统属性或者环境变量进行准备及验证
+	 * 2、初始化BeanFactory,并进行XML文件读取,在这一步骤中将会复用BeanFactory中配置文件读取解析及其他功能,这一步之后，
+	 * ClassPathXmlApplicationContext实际上就已经包含了BeanFactory所提供的功能;（可以进行Bean的提取等基础操作）
+	 * 3、对BeanFactory进行各种功能填充;(@Qualifier和@Autowired)
+	 * 4、子类覆盖方法做额外处理
+	 * 5、激活各种BeanFactory处理器
+	 * 6、注册拦截bean创建的bean处理器,这里只是注册，真正调用的时候是在getBean时候
+	 * 7、为上下文初始化Message源,即对不同语言的消息体进行国际化处理
+	 * 8、初始化应用消息广播器,并放入"applicationEventMulticaster" bean中
+	 * 9、留给子类来初始化其他的bean
+	 * 10、在所有注册的bean中查找listener bean,注册到消息广播器中
+	 * 11、初始化剩下的单实例（非惰性的）
+	 * 12、完成刷新过程,通知生命周期处理器lifecycleProcessor刷新过程,同时发出ContextRefreshEvent通知别人
+	 */
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
@@ -550,6 +568,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
+//			对BeanFactory进行各种功能填充
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
@@ -631,10 +650,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+//		该方法为空;该方法正式符合Spring的开放式的设计,用户可以根据资深的需要去重写initPropertySources方法
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
+//        对属性进行验证;
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...
