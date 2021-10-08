@@ -43,4 +43,7 @@
     对于singleton作用域bean,可以通过setAllowCircularReferences(false);来禁用循环引用
 
     -->
+    <!--============================================================-->
+    <bean id="testBeanFactoryAware" class="com.anle.test.TestBeanFactoryAware"/>
+    <bean id="hello" class="com.anle.bean.Hello"/>
 </beans>

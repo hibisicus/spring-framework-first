@@ -13,16 +13,19 @@ import org.w3c.dom.Element;
  * @date 2021-09-09 17:50
  */
 public class TestDemo02 extends DefaultBeanDefinitionDocumentReader {
-    @Override public void registerBeanDefinitions(Document doc, XmlReaderContext readerContext)
+    @Override
+    public void registerBeanDefinitions(Document doc, XmlReaderContext readerContext)
             throws BeanDefinitionStoreException {
         System.out.println("测试");
     }
+
     @Override
     protected void preProcessXml(Element root) {
         System.out.println("解析前处理");
     }
 
-    @Override protected void postProcessXml(Element root) {
+    @Override
+    protected void postProcessXml(Element root) {
         System.out.println("解析后处理");
     }
 }
