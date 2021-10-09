@@ -1,10 +1,6 @@
 package com.anle.test;
 
-import com.anle.config.JavaConfig;
-import com.anle.entity.GetBeanTest;
-import com.anle.entity.TestChanegMethod;
-import com.anle.entity.User;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import com.anle.bean.UserManager;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -35,9 +31,15 @@ public class Test {
         /* ===========================End================================ */
 
         /*-------------2021-1008 1631---------------------------------*/
+//        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("META_INF/spring/lookupTest.xml");
+//        BeanFactoryAwareTest test = (BeanFactoryAwareTest) ctx.getBean("testBeanFactoryAware");
+//        test.testAware();
+        /* ===========================End================================ */
+        /*-------------2021-1009 1619---------------------------------*/
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("META_INF/spring/lookupTest.xml");
-        TestBeanFactoryAware test = (TestBeanFactoryAware) ctx.getBean("testBeanFactoryAware");
-        test.testAware();
+        UserManager userManager = (UserManager) ctx.getBean("userManager");
+        System.out.println(userManager);
+
         /* ===========================End================================ */
 
     }

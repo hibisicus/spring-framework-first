@@ -1659,6 +1659,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	 * @param beanDefinition the bean definition that the value comes from
 	 * @return the resolved value
 	 * @see #setBeanExpressionResolver
+	 * 解析SpEL表达式;
+     * 当调用这个方法的时候,会判断是否存在语言解析器,如果存在,则调用语言解析器的方法继续宁解析,解析的过程是在Spring的expression的包内
+     * 应用语言解析器的主要调用是在解析依赖注入bean的时候,以及在完成bean的初始化和属性获取后进行属性填充的时候。
 	 */
 	@Nullable
 	protected Object evaluateBeanDefinitionString(@Nullable String value, @Nullable BeanDefinition beanDefinition) {

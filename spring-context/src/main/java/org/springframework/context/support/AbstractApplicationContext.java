@@ -689,6 +689,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
+//	    初始化BeanFactory,并进行XML文件读取,并将得到的BeanFactory记录在当前实体的属性中
 		refreshBeanFactory();
 		return getBeanFactory();
 	}
@@ -697,6 +698,15 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Configure the factory's standard context characteristics,
 	 * such as the context's ClassLoader and post-processors.
 	 * @param beanFactory the BeanFactory to configure
+     *
+     * 1、增加对SpEL语言的支持
+     * 2、增加对属性编辑器的支持
+     * 3、增加对部分内酯类,如EnvironmentAware、MessageSourceAware的信息注入
+     * 4、设置了依赖功能可忽略的接口
+     * 5、注册了一些固定依赖的属性
+     * 6、增加AspectJ的支持
+     * 7、将喜欢环境便改良及属性注册以单例模式注册
+     *
 	 */
 	protected void prepareBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		// Tell the internal bean factory to use the context's class loader etc.
@@ -704,9 +714,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		if (!shouldIgnoreSpel) {
 			beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
 		}
+//		为beanFactory增加了一个默认的propertyEditor,这个主要是对bean的属性等设置管理的一个工具
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
-		// Configure the bean factory with context callbacks.
+		// Configure the bean factory with context callbacks.;设置了几个自动忽略自动装配的接口
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
@@ -726,7 +737,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Register early post-processor for detecting inner beans as ApplicationListeners.
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
-		// Detect a LoadTimeWeaver and prepare for weaving, if found.
+		// Detect a LoadTimeWeaver and prepare for weaving, if found.;AspectJ
 		if (!NativeDetector.inNativeImage() && beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
 			beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
 			// Set a temporary ClassLoader for type matching.

@@ -11,7 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @version 1.0
  * @date 2021-10-08 16:18
  */
-public class TestBeanFactoryAware implements BeanFactoryAware {
+public class BeanFactoryAwareTest implements BeanFactoryAware {
     private BeanFactory beanFactory;
 
     /**

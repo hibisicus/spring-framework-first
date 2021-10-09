@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans
         xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="
-       http://www.springframework.org/schema/beans
-	   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
     <bean id="getBeanTest" name="" class="com.anle.entity.GetBeanTest">
         <!--动态返回teacher锁代表的bean作为getBean的返回值-->
         <lookup-method name="getBean" bean="student"/>
@@ -23,7 +26,7 @@
     </bean>
     <!--================================================================-->
 
-<!--    <bean id="car" class="com.anle.entity.Car" carInfo="品牌,2002,40000"/>-->
+    <!--    <bean id="car" class="com.anle.entity.Car" carInfo="品牌,2002,40000"/>-->
     <!--
     一、构造器循环依赖=========================================================
     Spring 容器创建testA bean,当前创建bean池 查找是否当前bean正在创建，如果没发现，则继续准备其需要的构造器参数testB 并将testA 标识符放到当前创建bean池
@@ -44,6 +47,25 @@
 
     -->
     <!--============================================================-->
-    <bean id="testBeanFactoryAware" class="com.anle.test.TestBeanFactoryAware"/>
+    <bean id="testBeanFactoryAware" class="com.anle.test.BeanFactoryAwareTest"/>
     <bean id="hello" class="com.anle.bean.Hello"/>
+    <!--============================================================-->
+    <bean id="userManager" class="com.anle.bean.UserManager">
+        <property name="dateValue" value="2021-10-09"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="customEditors">
+            <map>
+                <entry key="java.util.Date" value="com.anle.editor.DatePropertyEditor"/>
+
+         <!--       <entry key="java.util.Date">
+                    <bean class="com.anle.editor.DatePropertyEditor">
+                        <property name="format" value="yyyy- MM- dd"/>
+                    </bean>
+                </entry>-->
+            </map>
+        </property>
+    </bean>
+
 </beans>
