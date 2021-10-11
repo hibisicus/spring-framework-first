@@ -52,6 +52,10 @@ import org.springframework.util.StringValueResolver;
  * @deprecated as of 5.2; use {@code org.springframework.context.support.PropertySourcesPlaceholderConfigurer}
  * instead which is more flexible through taking advantage of the {@link org.springframework.core.env.Environment}
  * and {@link org.springframework.core.env.PropertySource} mechanisms.
+ *
+ * Spring加载任何实现了这个接口的bean的配置时,都会在bean工厂载入所有的bean的配置之后,执行postProcessBeanFactory方法,
+ * 在PropertyResourceConfigurer类中实现了postProcessorBeanFactory方法,该方法中先手调用了mergeProperties、
+ * convertProperties、processProperties这三个方法,分别得到配置,将得到的配置转化为合适的类型,最后将配置内容告知BeanFactory,
  */
 @Deprecated
 public class PropertyPlaceholderConfigurer extends PlaceholderConfigurerSupport {

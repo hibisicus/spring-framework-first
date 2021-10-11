@@ -1,7 +1,11 @@
 package com.anle.test;
 
 import com.anle.bean.UserManager;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * @author AnnLee
@@ -36,9 +40,16 @@ public class Test {
 //        test.testAware();
         /* ===========================End================================ */
         /*-------------2021-1009 1619---------------------------------*/
-        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("META_INF/spring/lookupTest.xml");
-        UserManager userManager = (UserManager) ctx.getBean("userManager");
-        System.out.println(userManager);
+//        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("META_INF/spring/lookupTest.xml");
+//        UserManager userManager = (UserManager) ctx.getBean("userManager");
+//        System.out.println(userManager);
+
+        /* ===========================End================================ */
+        /*-------------2021=1011-1719==屏蔽部分属性---------------------------------*/
+        ConfigurableListableBeanFactory bf = new XmlBeanFactory(new ClassPathResource("META_INF/spring/BeanFactory.xml"));
+        BeanFactoryPostProcessor bfpp = (BeanFactoryPostProcessor) bf.getBean("bfpp");
+        bfpp.postProcessBeanFactory(bf);
+        System.out.println(bf.getBean("simpleBean"));
 
         /* ===========================End================================ */
 

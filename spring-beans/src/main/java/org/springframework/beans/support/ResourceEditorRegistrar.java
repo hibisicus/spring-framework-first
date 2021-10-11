@@ -96,10 +96,15 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 	 * @see org.springframework.beans.propertyeditors.ClassEditor
 	 * @see org.springframework.beans.propertyeditors.ClassArrayEditor
 	 * @see org.springframework.core.io.support.ResourceArrayPropertyEditor
+	 *
+	 * 在bean的初始化后会调用ResourceEditorRegistrar的registerCustomEidtors方法进行批量的通用属性
+	 * 编辑器。注册后,在属性填充的环节便可以让Spring使用这些编辑器进行属性的解析了。
 	 */
 	@Override
 	public void registerCustomEditors(PropertyEditorRegistry registry) {
 		ResourceEditor baseEditor = new ResourceEditor(this.resourceLoader, this.propertyResolver);
+//		注册Class类对应的属性编辑器;注册后,一旦某个实体bean中存在着一些Class类型的属性,那么Spring会调用ClassEditor将配置中
+//		定义的String类型转化为Class类型并进行赋值
 		doRegisterEditor(registry, Resource.class, baseEditor);
 		doRegisterEditor(registry, ContextResource.class, baseEditor);
 		doRegisterEditor(registry, InputStream.class, new InputStreamEditor(baseEditor));
