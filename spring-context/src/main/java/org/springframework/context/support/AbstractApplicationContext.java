@@ -558,6 +558,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * 10、在所有注册的bean中查找listener bean,注册到消息广播器中
 	 * 11、初始化剩下的单实例（非惰性的）
 	 * 12、完成刷新过程,通知生命周期处理器lifecycleProcessor刷新过程,同时发出ContextRefreshEvent通知别人
+     *
+     * 记录后处理器主要使用了3个list完成
+     * registryPostProcessors:记录通过病变吗注册的BeanDefinitionRegistryPostProcessor类型的处理器
+     * regularPostProcessors:记录通过硬编码方式注册的BeanFactoryPostProcessor类型的处理器
+     * registryPostProcessorBeans:记录通过配置方式注册的BeanDefinitionRegistryPostProcessor类型的处理器
+     *
+     * 为了保证用户的调用顺序要求，Spring对于后处理器的调用支持按照PriorityOrdered或者Ordered的顺序调用
 	 */
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
@@ -831,6 +838,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Initialize the ApplicationEventMulticaster.
 	 * Uses SimpleApplicationEventMulticaster if none defined in the context.
 	 * @see org.springframework.context.event.SimpleApplicationEventMulticaster
+     *
+     * 当产生Spring事件的时候会默认使用SimpleApplicationEventMulticaster的multicastEvent来广播事件,遍历所有监视器,
+     * 并使用监听器中的onApplicationEvent方法来进行监听器的处理。而对于每个监听器来说其实都可以处理获取到产生的事件,但是是否
+     * 进行处理则由事件监听器来决定
 	 */
 	protected void initApplicationEventMulticaster() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
@@ -894,12 +905,14 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 */
 	protected void registerListeners() {
 		// Register statically specified listeners first.
+//        硬编码方式注册的监听器处理
 		for (ApplicationListener<?> listener : getApplicationListeners()) {
 			getApplicationEventMulticaster().addApplicationListener(listener);
 		}
 
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let post-processors apply to them!
+//        配置文件注册的监听器处理
 		String[] listenerBeanNames = getBeanNamesForType(ApplicationListener.class, true, false);
 		for (String listenerBeanName : listenerBeanNames) {
 			getApplicationEventMulticaster().addApplicationListenerBean(listenerBeanName);
@@ -944,9 +957,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.setTempClassLoader(null);
 
 		// Allow for caching all bean definition metadata, not expecting further changes.
+//        冻结所有的bean定义,说明注册的bean定义将不被修改或任何进一步的处理
 		beanFactory.freezeConfiguration();
 
 		// Instantiate all remaining (non-lazy-init) singletons.
+//        初始化剩下的单实例（非惰性的）
 		beanFactory.preInstantiateSingletons();
 	}
 

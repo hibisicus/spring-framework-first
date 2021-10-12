@@ -1,9 +1,11 @@
 package com.anle.test;
 
 import com.anle.bean.UserManager;
+import com.anle.event.TestEvent;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 
@@ -46,11 +48,17 @@ public class Test {
 
         /* ===========================End================================ */
         /*-------------2021=1011-1719==屏蔽部分属性---------------------------------*/
-        ConfigurableListableBeanFactory bf = new XmlBeanFactory(new ClassPathResource("META_INF/spring/BeanFactory.xml"));
-        BeanFactoryPostProcessor bfpp = (BeanFactoryPostProcessor) bf.getBean("bfpp");
-        bfpp.postProcessBeanFactory(bf);
-        System.out.println(bf.getBean("simpleBean"));
+//        ConfigurableListableBeanFactory bf = new XmlBeanFactory(new ClassPathResource("META_INF/spring/BeanFactory.xml"));
+//        BeanFactoryPostProcessor bfpp = (BeanFactoryPostProcessor) bf.getBean("bfpp");
+//        bfpp.postProcessBeanFactory(bf);
+//        System.out.println(bf.getBean("simpleBean"));
 
+        /* ===========================End================================ */
+        /*-------------2021=1012-1646==Spring事件监听---------------------------------*/
+        ApplicationContext context = new ClassPathXmlApplicationContext(
+                "classpath:META_INF/spring/BeanFactory.xml");
+        TestEvent event = new TestEvent("hello", "msg");
+        context.publishEvent(event);
         /* ===========================End================================ */
 
     }

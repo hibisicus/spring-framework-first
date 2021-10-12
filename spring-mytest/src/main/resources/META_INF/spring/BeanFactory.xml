@@ -14,9 +14,21 @@
             </set>
         </property>
     </bean>
-    <bean id="simpleBean" class="com.anle.processor.SimplePostProcessor">
+<!--    <bean id="simpleBean" class="com.anle.processor.SimplePostProcessor">
         <property name="connectionString" value="bollocks"/>
         <property name="password" value="imagasdasinecop"/>
         <property name="username" value="Microsoft"/>
+    </bean>-->
+
+    <bean class="com.anle.processor.MyInstantiationAwareBeanPostProcessor"/>
+
+    <bean id="testListener" class="com.anle.listener.TestListener"/>
+
+    <bean id = "conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="com.anle.convert.String2DateConverter"/>
+            </list>
+        </property>
     </bean>
 </beans>
