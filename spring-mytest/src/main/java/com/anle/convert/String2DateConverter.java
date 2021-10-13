@@ -1,9 +1,9 @@
 package com.anle.convert;
 
-import com.sun.org.apache.xpath.internal.operations.String;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.core.convert.converter.Converter;
 
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -14,6 +14,10 @@ import java.util.Date;
 public class String2DateConverter implements Converter<String, Date> {
     @Override
     public Date convert(String source) {
-        return new Date("yyyy-MM-dd HH:mm:ss");
+        try {
+            return DateUtils.parseDate(source, new String[] { "yyyy-MM-dd HH:mm:ss" });
+        } catch (ParseException e) {
+            return null;
+        }
     }
 }

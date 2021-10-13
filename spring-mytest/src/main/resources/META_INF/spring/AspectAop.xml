@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	   http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <aop:aspectj-autoproxy/>
+    <bean class="com.anle.aop.AspectJTest"/>
+    <bean id="testBeanAop" class="com.anle.bean.TestBeanAop"/>
+
+
+    <!--    <aop:config>-->
+    <!--        &lt;!&ndash; 3.切入点配置 &ndash;&gt;-->
+    <!--        <aop:pointcut expression="execution(* com.huitong.Dao3.UserDao.*(..))" id="pt"/>-->
+    <!--        &lt;!&ndash; 4.切面配置 &ndash;&gt;-->
+    <!--        <aop:aspect id="asp" ref="aop">-->
+    <!--            &lt;!&ndash; 5.通知配置 &ndash;&gt;-->
+    <!--            <aop:around method="around" pointcut-ref="pt"/>-->
+    <!--            <aop:before method="before" pointcut-ref="pt"/>-->
+    <!--        </aop:aspect>-->
+    <!--    </aop:config>-->
+</beans>

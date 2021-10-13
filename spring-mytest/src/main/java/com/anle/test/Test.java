@@ -1,13 +1,19 @@
 package com.anle.test;
 
+import com.anle.bean.PhoneNumberModel;
+import com.anle.bean.TestBeanAop;
 import com.anle.bean.UserManager;
+import com.anle.convert.StringToPhoneNumberConverter;
 import com.anle.event.TestEvent;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.ui.Model;
+import org.testng.Assert;
 
 /**
  * @author AnnLee
@@ -55,10 +61,23 @@ public class Test {
 
         /* ===========================End================================ */
         /*-------------2021=1012-1646==Spring事件监听---------------------------------*/
-        ApplicationContext context = new ClassPathXmlApplicationContext(
-                "classpath:META_INF/spring/BeanFactory.xml");
-        TestEvent event = new TestEvent("hello", "msg");
-        context.publishEvent(event);
+//        ApplicationContext context = new ClassPathXmlApplicationContext(
+//                "classpath:META_INF/spring/BeanFactory.xml");
+//        TestEvent event = new TestEvent("hello", "msg");
+//        context.publishEvent(event);
+        /* ===========================End================================ */
+
+        /*-------------2021=1013-0958==测试Converter和ConversionService---------------------------------*/
+//        DefaultConversionService conversionService = new DefaultConversionService();
+//        conversionService.addConverter(new StringToPhoneNumberConverter());
+//        String phoneNumberStr = "010-12345678";
+//        PhoneNumberModel phoneNumber = conversionService.convert(phoneNumberStr, PhoneNumberModel.class);
+//
+//        Assert.assertEquals("010", phoneNumber.getAreaCode());
+        /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
+        ApplicationContext bf = new ClassPathXmlApplicationContext("META_INF/spring/AspectAop.xml");
+        TestBeanAop bean = (TestBeanAop) bf.getBean("testBeanAop");
+        bean.test();
         /* ===========================End================================ */
 
     }

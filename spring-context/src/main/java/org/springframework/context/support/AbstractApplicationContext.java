@@ -397,6 +397,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * or a payload object to be turned into a {@link PayloadApplicationEvent})
 	 * @param eventType the resolved event type, if known
 	 * @since 4.2
+     * 当完成ApplicationCOntext初始化的时候,要通过Spring中的时间发布机制来发出ContextRefreshedEvent事件
+     * 以保证对应的监听器可以做进一步的逻辑处理
 	 */
 	protected void publishEvent(Object event, @Nullable ResolvableType eventType) {
 		Assert.notNull(event, "Event must not be null");
@@ -866,6 +868,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Initialize the LifecycleProcessor.
 	 * Uses DefaultLifecycleProcessor if none defined in the context.
 	 * @see org.springframework.context.support.DefaultLifecycleProcessor
+     *
+     * 当ApplicaContext启动或停止时,他会通过lifecycleProcessor来与生命的bean的周期做状态更新,而在
+     * LifecycleProcessor的使用前首先需要初始化
 	 */
 	protected void initLifecycleProcessor() {
 		ConfigurableListableBeanFactory beanFactory = getBeanFactory();
@@ -931,6 +936,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Finish the initialization of this context's bean factory,
 	 * initializing all remaining singleton beans.
+     * 创建并配置所有的单例Bean
 	 */
 	protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
 		// Initialize conversion service for this context.
@@ -969,6 +975,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Finish the refresh of this context, invoking the LifecycleProcessor's
 	 * onRefresh() method and publishing the
 	 * {@link org.springframework.context.event.ContextRefreshedEvent}.
+     *
+     * Spring 提供了Lifecycle接口,Lifecycle中包含start/stop方法,实现此接口后,Spring会保证在
+     * 启动的时候调用其start方法开始生命周期,并在Spring关闭的时候调用stop方法来结束生命周期;
+     * 通常用来配置后台程序,在启动后一直运行（如对MQ进行轮训等）。而ApplicationContext的初始化
+     * 最后证实保证了这一功能的实现
 	 */
 	@SuppressWarnings("deprecation")
 	protected void finishRefresh() {
