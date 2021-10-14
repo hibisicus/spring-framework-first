@@ -84,6 +84,7 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 			Method aspectJAdviceMethod, AspectJAdvisorFactory aspectJAdvisorFactory,
 			MetadataAwareAspectInstanceFactory aspectInstanceFactory, int declarationOrder, String aspectName) {
 
+//		test()
 		this.declaredPointcut = declaredPointcut;
 		this.declaringClass = aspectJAdviceMethod.getDeclaringClass();
 		this.methodName = aspectJAdviceMethod.getName();
@@ -219,6 +220,7 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 			this.isAfterAdvice = false;
 		}
 		else {
+//			根据不同的注解类型封装不同的增强器
 			switch (aspectJAnnotation.getAnnotationType()) {
 				case AtPointcut:
 				case AtAround:

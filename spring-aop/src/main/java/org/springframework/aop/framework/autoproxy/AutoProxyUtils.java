@@ -64,6 +64,7 @@ public abstract class AutoProxyUtils {
 	 * @param beanFactory the containing ConfigurableListableBeanFactory
 	 * @param beanName the name of the bean
 	 * @return whether the given bean should be proxied with its target class
+	 * 判断有没有PRESERVE_TARGET_CLASS_ATTRIBUTE属性,存在则设置ProxyTargetClass = true
 	 */
 	public static boolean shouldProxyTargetClass(
 			ConfigurableListableBeanFactory beanFactory, @Nullable String beanName) {

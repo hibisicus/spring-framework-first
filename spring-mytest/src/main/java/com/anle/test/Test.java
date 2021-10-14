@@ -75,9 +75,13 @@ public class Test {
 //
 //        Assert.assertEquals("010", phoneNumber.getAreaCode());
         /*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-        ApplicationContext bf = new ClassPathXmlApplicationContext("META_INF/spring/AspectAop.xml");
-        TestBeanAop bean = (TestBeanAop) bf.getBean("testBeanAop");
-        bean.test();
+//        ApplicationContext bf = new ClassPathXmlApplicationContext("META_INF/spring/AspectAop.xml");
+//        TestBeanAop bean = (TestBeanAop) bf.getBean("testBeanAop");
+//        bean.test();
+        /* ===========================End================================ */
+
+        /*-------------2021=1014-1605==测试AOP对接口增强---------------------------------*/
+
         /* ===========================End================================ */
 
     }

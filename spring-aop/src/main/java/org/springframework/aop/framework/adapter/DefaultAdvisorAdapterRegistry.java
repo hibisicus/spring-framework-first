@@ -55,15 +55,18 @@ public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry, Se
 
 	@Override
 	public Advisor wrap(Object adviceObject) throws UnknownAdviceTypeException {
+//		如果要封装的对象本身就是Advisor类型的,那么无需再做过多处理
 		if (adviceObject instanceof Advisor) {
 			return (Advisor) adviceObject;
 		}
+//		因为此封装方法支队Advisor与Advice两种类型的数据有效,如果不是将不能封装
 		if (!(adviceObject instanceof Advice)) {
 			throw new UnknownAdviceTypeException(adviceObject);
 		}
 		Advice advice = (Advice) adviceObject;
 		if (advice instanceof MethodInterceptor) {
 			// So well-known it doesn't even need an adapter.
+//			MethodInterceptor类型不需要封装器
 			return new DefaultPointcutAdvisor(advice);
 		}
 		for (AdvisorAdapter adapter : this.adapters) {
