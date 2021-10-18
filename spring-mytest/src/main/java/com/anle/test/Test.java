@@ -5,6 +5,9 @@ import com.anle.bean.TestBeanAop;
 import com.anle.bean.UserManager;
 import com.anle.convert.StringToPhoneNumberConverter;
 import com.anle.event.TestEvent;
+import com.anle.handler.MyInvocationHandler;
+import com.anle.service.UserService;
+import com.anle.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
@@ -81,7 +84,10 @@ public class Test {
         /* ===========================End================================ */
 
         /*-------------2021=1014-1605==测试AOP对接口增强---------------------------------*/
-
+        UserService userService = new UserServiceImpl();
+        MyInvocationHandler invocationHandler = new MyInvocationHandler(userService);
+        UserService proxy = (UserService) invocationHandler.getProxy();
+        proxy.add();
         /* ===========================End================================ */
 
     }

@@ -71,7 +71,11 @@ public class DefaultContextLoadTimeWeaver implements LoadTimeWeaver, BeanClassLo
 		setBeanClassLoader(beanClassLoader);
 	}
 
-
+	/*
+	* Spring中的bean之间的关系如下
+	* AspectJWeavingEnabler 类型的bean中的loadTimeWeaver 属性呗初始化为DefaultContextLoadTimeWeaver类型的bean
+	* DefaultContextLoadTImeWeaver 类型的bean中的loadTImeWeaver属性被初始化为InstrumentationLoadTimeWeaver;
+	* */
 	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
 		LoadTimeWeaver serverSpecificLoadTimeWeaver = createServerSpecificLoadTimeWeaver(classLoader);
@@ -83,6 +87,7 @@ public class DefaultContextLoadTimeWeaver implements LoadTimeWeaver, BeanClassLo
 			this.loadTimeWeaver = serverSpecificLoadTimeWeaver;
 		}
 		else if (InstrumentationLoadTimeWeaver.isInstrumentationAvailable()) {
+//			检查当前虚拟机的Instrumentation实例是否可用
 			logger.debug("Found Spring's JVM agent for instrumentation");
 			this.loadTimeWeaver = new InstrumentationLoadTimeWeaver(classLoader);
 		}
