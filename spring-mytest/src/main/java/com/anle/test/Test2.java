@@ -1,8 +1,11 @@
-package com.anle.test
+package com.anle.test;
 
 
-public Class Test2 {
+/**
+ * @author hibisicus
+ */
+public class Test2 {
 		public static void main(String[] args){
-			System.out.printLn("111");
+			System.out.println("111");
 		}
 }

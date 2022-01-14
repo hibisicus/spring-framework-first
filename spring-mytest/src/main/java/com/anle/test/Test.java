@@ -1,22 +1,8 @@
 package com.anle.test;
 
-import com.anle.bean.PhoneNumberModel;
-import com.anle.bean.TestBeanAop;
-import com.anle.bean.UserManager;
-import com.anle.convert.StringToPhoneNumberConverter;
-import com.anle.event.TestEvent;
 import com.anle.handler.MyInvocationHandler;
 import com.anle.service.UserService;
 import com.anle.service.impl.UserServiceImpl;
-import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.convert.support.DefaultConversionService;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.ui.Model;
-import org.testng.Assert;
 
 /**
  * @author AnnLee
